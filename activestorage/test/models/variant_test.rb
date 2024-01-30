@@ -13,6 +13,13 @@ class ActiveStorage::VariantTest < ActiveSupport::TestCase
     ActiveStorage.track_variants = @was_tracking
   end
 
+  test "variations have a key starting with 'variants/'" do
+    blob = create_file_blob(filename: "racecar.jpg")
+    variant = blob.variant(resize_to_limit: [100, 100])
+
+    assert variant.key.start_with?('variants/')
+  end
+
   test "variations have the same key for different types of the same transformation" do
     blob = create_file_blob(filename: "racecar.jpg")
     variant_a = blob.variant(resize_to_limit: [100, 100])

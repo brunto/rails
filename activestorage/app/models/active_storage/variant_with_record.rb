@@ -20,6 +20,11 @@ class ActiveStorage::VariantWithRecord
     self
   end
 
+  # Returns a combination key of the blob and the variation that together identifies a specific variant.
+  def key
+    "variants/#{blob.key}/#{OpenSSL::Digest::SHA256.hexdigest(variation.key)}"
+  end
+
   def image
     record&.image
   end
@@ -33,7 +38,7 @@ class ActiveStorage::VariantWithRecord
     record&.destroy
   end
 
-  delegate :key, :url, :download, to: :image, allow_nil: true
+  delegate :url, :download, to: :image, allow_nil: true
 
   private
     def processed?
